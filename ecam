@@ -1,0 +1,85 @@
+def obtener_precio(letra):
+    if letra == "A":
+        return 3000
+    elif letra == "B":
+        return 2800
+    elif letra == "C":
+        return 3200
+    elif letra == "D":
+        return 3500
+
+def comprar_departamento(edificio, piso, letra, rut):
+    if edificio[piso][letra] == "-":
+        edificio[piso][letra] = "x"
+        return True
+    else:
+        return False
+
+def mostrar_edificio(edificio):
+    letras = ["A", "B", "C", "D"]
+    print("   A B C D")
+    for piso in edificio:
+        print(str(piso) + " ", end="")
+        for letra in letras:
+            print(edificio[piso][letra] + " ", end="")
+        print()
+
+def mostrar_ventas(edificio):
+    for piso in edificio:
+        for letra in edificio[piso]:
+            if edificio[piso][letra] == "x":
+                print(f"Departamento {letra}{piso}: Comprado por {edificio[piso][letra]}")
+
+def calcular_ventas_totales(edificio):
+    ganancias = {"A": 0, "B": 0, "C": 0, "D": 0}
+    for piso in edificio:
+        for letra in edificio[piso]:
+            if edificio[piso][letra] == "x":
+                precio = obtener_precio(letra)
+                ganancias[letra] += precio
+    return ganancias
+
+# Crear edificio vacío
+edificio = {}
+for piso in range(1, 11):
+    edificio[piso] = {"A": "-", "B": "-", "C": "-", "D": "-"}
+
+while True:
+    print("=== Menú ===")
+    print("1. Comprar departamento")
+    print("2. Mostrar departamentos")
+    print("3. Mostrar ventas")
+    print("4. Mostrar ventas totales")
+    print("5. Salir")
+    opcion = int(input("Ingrese una opción: "))
+
+    if opcion == 1:
+        mostrar_edificio(edificio)
+        piso = int(input("Ingrese el número de piso: "))
+        letra = input("Ingrese la letra del departamento (A, B, C o D): ")
+        rut = input("Ingrese su rut: ")
+        if piso in edificio and letra in edificio[piso]:
+            if comprar_departamento(edificio, piso, letra, rut):
+                print("¡Departamento comprado con éxito!")
+            else:
+                print("La opción seleccionada no está disponible.")
+        else:
+            print("La opción seleccionada es inválida.")
+
+    elif opcion == 2:
+        mostrar_edificio(edificio)
+
+    elif opcion == 3:
+        mostrar_ventas(edificio)
+
+    elif opcion == 4:
+        ganancias = calcular_ventas_totales(edificio)
+        for letra, ganancia in ganancias.items():
+            print("Ganancias por departamento", letra + ":", ganancia, "UF")
+
+    elif opcion == 5:
+        print("¡Hasta luego!")
+        break
+
+    else:
+        print("Opción inválida. Intente nuevamente.")
